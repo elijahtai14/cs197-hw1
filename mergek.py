@@ -21,7 +21,7 @@ class Solution:
             cur = cur.next
         
         return head
-    
+   
     def mergeKLists(self, lists):
         res = []
         def fill_pq(PQ, heads):
@@ -48,10 +48,57 @@ class Solution:
         while not temp is None:
             print(temp.val)
             temp = temp.next
-            
+
+class Solution2:
+    def list_to_list_node(self, list):
+        
+        if len(list) == 0:
+            return None
+        
+        head = ListNode(val = list[0])
+        cur = head
+
+        for i in range(1, len(list)):
+            cur.next = ListNode(val = list[i])
+            cur = cur.next
+        
+        return head
+
+    def mergeKLists_helper(self, PQ, lists, res):
+        if PQ.empty():
+            return
+        
+        val, index = PQ.get()
+        if not lists[index] is None:
+            PQ.put((lists[index].val, index))
+            lists[index] = lists[index].next
+        
+        res.append(val)
+
+        self.mergeKLists_helper(PQ, lists, res)
+    
+    def mergeKLists(self, lists):
+        PQ = PriorityQueue()
+
+        def fill_pq(PQ, lists):
+            for i in range(len(lists)):
+                if not lists[i] is None:
+                    PQ.put((lists[i].val, i))
+                    lists[i] = lists[i].next
+        fill_pq(PQ, lists)
+
+        res = []
+        self.mergeKLists_helper(PQ, lists, res)
+        return self.list_to_list_node(res)    
+
+    def print_linked_list(self, node):
+        temp = node
+        while not temp is None:
+            print(temp.val)
+            temp = temp.next    
     
 def main():
-    s = Solution()
+    s = Solution2()
     
     example_input = [s.list_to_list_node([0, 2, 5])]
 
